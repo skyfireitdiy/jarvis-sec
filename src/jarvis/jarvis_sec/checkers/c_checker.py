@@ -7,11 +7,11 @@ Jarvis 安全分析套件 —— C/C++ 启发式安全检查器
 - 面向 C/C++ 与头文件（.c/.cpp/.h/.hpp）。
 
 输出约定：
-- 返回 jarvis_sec.workflow.Issue 列表（保持结构化，便于聚合评分与报告生成）。
+- 返回 jarvis.jarvis_sec.workflow.Issue 列表（保持结构化，便于聚合评分与报告生成）。
 - 置信度区间 [0,1]，基于命中规则与上下文线索加权计算；严重性（severity）分为 high/medium/low。
 
 使用方式（示例）：
-- from jarvis_sec.checkers.c_checker import analyze_files
+- from jarvis.jarvis_sec.checkers.c_checker import analyze_files
 - issues = analyze_files("./repo", ["src/a.c", "include/a.h"])
 """
 
@@ -30,16 +30,16 @@ from typing import Optional
 from typing import Sequence
 from typing import Tuple
 
-from jarvis_sec.types import Issue
+from jarvis.jarvis_sec.types import Issue
 
 if TYPE_CHECKING:
-    from jarvis_sec.project_database import ProjectDatabase
+    from jarvis.jarvis_sec.project_database import ProjectDatabase
 
 # 污点分析框架（核心依赖）
-import jarvis_sec.taint_analyzer as taint_analyzer
+import jarvis.jarvis_sec.taint_analyzer as taint_analyzer
 
 # 数据流分析器（用于误报过滤）
-from jarvis_sec.data_flow_analyzer import (
+from jarvis.jarvis_sec.data_flow_analyzer import (
     DataFlowAnalyzer,
     DataFlowResult,
     PointerState,
@@ -676,7 +676,7 @@ def _rule_unsafe_api(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.checkers.c_checker",
+                        module="jarvis.jarvis_sec.checkers.c_checker",
                         function="_rule_unsafe_api",
                     )
                     pass
@@ -914,7 +914,7 @@ def _extract_call_args(line: str, func_name: str) -> str:
             return line[start + 1 : end]
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.c_checker", function="_extract_call_args"
+            e, module="jarvis.jarvis_sec.checkers.c_checker", function="_extract_call_args"
         )
         pass
     return ""
@@ -1206,7 +1206,7 @@ def _rule_malloc_no_null_check(
     # 优先尝试database驱动检测
     if database:
         try:
-            from jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
+            from jarvis.jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
 
             analyzer = DataFlowAnalyzer(database)
             code = "\n".join(lines)
@@ -1243,7 +1243,7 @@ def _rule_malloc_no_null_check(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_malloc_no_null_check",
             )
             pass
@@ -1264,7 +1264,7 @@ def _rule_function_return_ptr_no_check(
     # 优先尝试database驱动检测
     if database:
         try:
-            from jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
+            from jarvis.jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
 
             analyzer = DataFlowAnalyzer(database)
             code = "\n".join(lines)
@@ -1320,7 +1320,7 @@ def _rule_function_return_ptr_no_check(
                                 except Exception as e:
                                     save_exception(
                                         e,
-                                        module="jarvis_sec.checkers.c_checker",
+                                        module="jarvis.jarvis_sec.checkers.c_checker",
                                         function="_rule_function_return_ptr_no_check",
                                     )
                                     pass
@@ -1352,7 +1352,7 @@ def _rule_function_return_ptr_no_check(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_function_return_ptr_no_check",
             )
             pass
@@ -1498,7 +1498,7 @@ def _detect_cross_file_double_free(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.c_checker",
+            module="jarvis.jarvis_sec.checkers.c_checker",
             function="_detect_cross_file_double_free",
         )
         pass
@@ -1666,7 +1666,7 @@ def _detect_cross_file_uaf(
         conn.close()
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.c_checker", function="_detect_cross_file_uaf"
+            e, module="jarvis.jarvis_sec.checkers.c_checker", function="_detect_cross_file_uaf"
         )
         pass
 
@@ -1817,7 +1817,7 @@ def _rule_unchecked_io(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.checkers.c_checker",
+                    module="jarvis.jarvis_sec.checkers.c_checker",
                     function="_rule_unchecked_io",
                 )
                 pass
@@ -1834,7 +1834,7 @@ def _rule_unchecked_io(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.checkers.c_checker",
+                    module="jarvis.jarvis_sec.checkers.c_checker",
                     function="_rule_unchecked_io",
                 )
                 pass
@@ -1863,7 +1863,7 @@ def _rule_unchecked_io(
                         except Exception as e:
                             save_exception(
                                 e,
-                                module="jarvis_sec.checkers.c_checker",
+                                module="jarvis.jarvis_sec.checkers.c_checker",
                                 function="_rule_unchecked_io",
                             )
                             pass
@@ -1899,7 +1899,7 @@ def _rule_unchecked_io(
                     _protected_lines_regex.add(n["line"])
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.checkers.c_checker", function="_rule_unchecked_io"
+                e, module="jarvis.jarvis_sec.checkers.c_checker", function="_rule_unchecked_io"
             )
             pass
     for idx, s in enumerate(lines, start=1):
@@ -2055,7 +2055,7 @@ def _rule_strncpy_no_nullterm(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.checkers.c_checker",
+                        module="jarvis.jarvis_sec.checkers.c_checker",
                         function="_rule_strncpy_no_nullterm",
                     )
                     pass
@@ -2315,7 +2315,7 @@ def _rule_format_string(
                     flagged = True
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.checkers.c_checker", function="_nth_arg_start"
+                    e, module="jarvis.jarvis_sec.checkers.c_checker", function="_nth_arg_start"
                 )
                 pass
 
@@ -2344,7 +2344,7 @@ def _rule_format_string(
                     flagged = True
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.checkers.c_checker", function="_nth_arg_start"
+                    e, module="jarvis.jarvis_sec.checkers.c_checker", function="_nth_arg_start"
                 )
                 pass
 
@@ -2408,7 +2408,7 @@ def _rule_insecure_tmpfile(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_insecure_tmpfile",
             )
             pass
@@ -2591,7 +2591,7 @@ def _rule_command_execution(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_command_execution",
             )
             pass
@@ -2620,7 +2620,7 @@ def _rule_command_execution(
                         flagged = True
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.checkers.c_checker", function="_var_sanitized"
+                    e, module="jarvis.jarvis_sec.checkers.c_checker", function="_var_sanitized"
                 )
                 pass
         if not flagged:
@@ -2682,7 +2682,7 @@ def _rule_command_execution(
                     )
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.checkers.c_checker", function="_var_sanitized"
+                    e, module="jarvis.jarvis_sec.checkers.c_checker", function="_var_sanitized"
                 )
                 pass
 
@@ -2725,7 +2725,7 @@ def _rule_command_execution(
                         )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.checkers.c_checker", function="_var_sanitized"
+                e, module="jarvis.jarvis_sec.checkers.c_checker", function="_var_sanitized"
             )
             pass
 
@@ -2812,7 +2812,7 @@ def _rule_sql_injection(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_sql_injection",
             )
             pass
@@ -2960,7 +2960,7 @@ def _rule_memory_leak(
                 func_params.add(sym.get("name", ""))
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.c_checker", function="_rule_memory_leak"
+            e, module="jarvis.jarvis_sec.checkers.c_checker", function="_rule_memory_leak"
         )
         pass
 
@@ -2975,7 +2975,7 @@ def _rule_memory_leak(
                 continue
             # 跳过有null check的变量（说明调用者关注了返回值）
             try:
-                from jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
+                from jarvis.jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
 
                 analyzer = DataFlowAnalyzer(database)
                 code = "\n".join(lines)
@@ -2987,7 +2987,7 @@ def _rule_memory_leak(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.checkers.c_checker",
+                    module="jarvis.jarvis_sec.checkers.c_checker",
                     function="_rule_memory_leak",
                 )
                 pass
@@ -3420,7 +3420,7 @@ def _rule_integer_overflow(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_integer_overflow",
             )
             pass
@@ -3494,7 +3494,7 @@ def _rule_hardcoded_credentials(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_hardcoded_credentials",
             )
             pass
@@ -3597,7 +3597,7 @@ def _rule_toctou_race(
                 return _rule_toctou_race_from_calls(lines, relpath, file_calls)
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.checkers.c_checker", function="_rule_toctou_race"
+                e, module="jarvis.jarvis_sec.checkers.c_checker", function="_rule_toctou_race"
             )
             pass
 
@@ -4665,7 +4665,7 @@ def _rule_alloc_size_overflow(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.checkers.c_checker",
+                    module="jarvis.jarvis_sec.checkers.c_checker",
                     function="_rule_alloc_size_overflow",
                 )
                 pass
@@ -5883,7 +5883,7 @@ def _rule_possible_null_deref(
             pass
     # 优先尝试污点分析
     try:
-        import jarvis_sec.taint_analyzer as taint_analyzer
+        import jarvis.jarvis_sec.taint_analyzer as taint_analyzer
 
         analyzer = taint_analyzer.TaintAnalyzerFactory.create("joern")
         if analyzer and analyzer.is_available():
@@ -5913,7 +5913,7 @@ def _rule_possible_null_deref(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.c_checker",
+            module="jarvis.jarvis_sec.checkers.c_checker",
             function="_rule_possible_null_deref",
         )
         pass
@@ -6429,7 +6429,7 @@ def _rule_deadlock_patterns(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_deadlock_patterns",
             )
             pass
@@ -6457,7 +6457,7 @@ def _rule_double_free_and_free_non_heap(
 
     # 优先尝试污点分析
     try:
-        import jarvis_sec.taint_analyzer as taint_analyzer
+        import jarvis.jarvis_sec.taint_analyzer as taint_analyzer
 
         analyzer = taint_analyzer.TaintAnalyzerFactory.create("joern")
         if analyzer and analyzer.is_available():
@@ -6485,7 +6485,7 @@ def _rule_double_free_and_free_non_heap(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.c_checker",
+            module="jarvis.jarvis_sec.checkers.c_checker",
             function="_rule_double_free_and_free_non_heap",
         )
         pass
@@ -6605,7 +6605,7 @@ def _rule_atoi_family(
                 return issues
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.checkers.c_checker", function="_rule_atoi_family"
+                e, module="jarvis.jarvis_sec.checkers.c_checker", function="_rule_atoi_family"
             )
             pass
 
@@ -6676,7 +6676,7 @@ def _rule_rand_insecure(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_rand_insecure",
             )
             pass
@@ -6727,7 +6727,7 @@ def _rule_strtok_nonreentrant(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_strtok_nonreentrant",
             )
             pass
@@ -6799,7 +6799,7 @@ def _rule_open_permissive_perms(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_open_permissive_perms",
             )
             pass
@@ -6938,7 +6938,7 @@ def _rule_alloca_unbounded(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_alloca_unbounded",
             )
             pass
@@ -7046,7 +7046,7 @@ def _rule_pthread_returns_unchecked(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_pthread_returns_unchecked",
             )
             pass
@@ -7122,7 +7122,7 @@ def _rule_cond_wait_no_loop(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_cond_wait_no_loop",
             )
             pass
@@ -7238,7 +7238,7 @@ def _rule_thread_leak_no_join(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_thread_leak_no_join",
             )
             pass
@@ -7288,7 +7288,7 @@ def _rule_inet_legacy(
                 return issues
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.checkers.c_checker", function="_rule_inet_legacy"
+                e, module="jarvis.jarvis_sec.checkers.c_checker", function="_rule_inet_legacy"
             )
             pass
 
@@ -7338,7 +7338,7 @@ def _rule_time_apis_not_threadsafe(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_time_apis_not_threadsafe",
             )
             pass
@@ -7359,7 +7359,7 @@ def _rule_getenv_unchecked(
     # 优先尝试database驱动检测
     if database:
         try:
-            from jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
+            from jarvis.jarvis_sec.data_flow_analyzer import DataFlowAnalyzer
 
             analyzer = DataFlowAnalyzer(database)
             code = "\n".join(lines)
@@ -7440,7 +7440,7 @@ def _rule_getenv_unchecked(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.checkers.c_checker",
+                module="jarvis.jarvis_sec.checkers.c_checker",
                 function="_rule_getenv_unchecked",
             )
             pass
@@ -8806,8 +8806,8 @@ def analyze_c_cpp_text(
     _db_file_path = relpath  # 用于查询database的文件路径
     if database is None:
         try:
-            from jarvis_sec.project_database import ProjectDatabase
-            from jarvis_sec.data_collector import DataCollector
+            from jarvis.jarvis_sec.project_database import ProjectDatabase
+            from jarvis.jarvis_sec.data_collector import DataCollector
 
             _temp_database = ProjectDatabase(".", in_memory=True)
             collector = DataCollector(_temp_database)

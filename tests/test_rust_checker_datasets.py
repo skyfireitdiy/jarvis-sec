@@ -3,13 +3,13 @@
 Rust Checker 数据集驱动测试
 
 测试方式：
-- 遍历 tests/jarvis_sec/datasets/rust_* 目录
+- 遍历 tests/jarvis.jarvis_sec/datasets/rust_* 目录
 - 读取 metadata.json 获取预期检测的漏洞类型
 - 对 positive_*.rs 文件验证是否检测到预期漏洞
 - 对 negative_*.rs 文件验证不应有误报
 
 运行：
-- 使用 pytest 执行：pytest tests/jarvis_sec/test_rust_checker_datasets.py -v
+- 使用 pytest 执行：pytest tests/jarvis.jarvis_sec/test_rust_checker_datasets.py -v
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 from typing import List
 
-from jarvis_sec.checkers import analyze_rust_text
+from jarvis.jarvis_sec.checkers import analyze_rust_text
 
 
 # 数据集根目录

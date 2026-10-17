@@ -11,7 +11,7 @@ Jarvis 安全分析套件 —— Workflow（含可复现直扫基线）
 - direct_scan(entry_path, languages=None, exclude_dirs=None) -> Dict：纯Python+正则/命令行辅助扫描，生成结构化结果
 - format_markdown_report(result_json: Dict) -> str：将结构化结果转为可读的 Markdown
 
-- run_with_agent(entry_path, languages=None) -> str：使用单Agent逐条子任务分析模式（复用 jarvis_sec.__init__ 的实现）
+- run_with_agent(entry_path, languages=None) -> str：使用单Agent逐条子任务分析模式（复用 jarvis.jarvis_sec.__init__ 的实现）
 """
 
 from jarvis.jarvis_utils.exception_utils import save_exception
@@ -21,16 +21,16 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from jarvis.jarvis_utils.output import PrettyOutput
 from jarvis.jarvis_utils.input import get_single_line_input
-from jarvis_sec.checkers import analyze_c_files
-from jarvis_sec.checkers import analyze_rust_files
-from jarvis_sec.types import Issue
-from jarvis_sec.project_database import ProjectDatabase
+from jarvis.jarvis_sec.checkers import analyze_c_files
+from jarvis.jarvis_sec.checkers import analyze_rust_files
+from jarvis.jarvis_sec.types import Issue
+from jarvis.jarvis_sec.project_database import ProjectDatabase
 
 # ---------------------------
 # 数据结构
 # ---------------------------
 
-# Issue dataclass is provided by jarvis_sec.types to avoid circular imports
+# Issue dataclass is provided by jarvis.jarvis_sec.types to avoid circular imports
 
 
 # ---------------------------
@@ -362,7 +362,7 @@ def run_with_agent(
     output_file: Optional[str] = None,
 ) -> str:
     """
-    使用单Agent逐条子任务分析模式运行（与 jarvis_sec.__init__ 中保持一致）。
+    使用单Agent逐条子任务分析模式运行（与 jarvis.jarvis_sec.__init__ 中保持一致）。
     - 先执行本地直扫，生成候选问题
     - 为每条候选创建一次普通Agent任务进行分析与验证
     - 聚合为最终报告（JSON + Markdown）返回
@@ -373,7 +373,7 @@ def run_with_agent(
     - exclude_dirs: 要排除的目录列表（可选），默认已包含构建产物（build, out, target, dist, bin, obj）、依赖目录（third_party, vendor, deps, dependencies, libs, libraries, external, node_modules）、测试目录（test, tests, __tests__, spec, testsuite, testdata）、性能测试目录（benchmark, benchmarks, perf, performance, bench, benches, profiling, profiler）、示例目录（example, examples）、临时/缓存（tmp, temp, cache, .cache）、文档（docs, doc, documentation）、生成代码（generated, gen）和其他（mocks, fixtures, samples, sample, playground, sandbox）
     - enable_verification: 是否启用二次验证（默认 True），关闭后分析Agent确认的问题将直接写入报告
     """
-    from jarvis_sec import run_security_analysis  # 延迟导入，避免循环
+    from jarvis.jarvis_sec import run_security_analysis  # 延迟导入，避免循环
 
     return run_security_analysis(
         entry_path,
@@ -599,7 +599,7 @@ def _create_conversion_agent(
             Path(script_file).unlink()
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.workflow", function="_create_conversion_agent"
+                e, module="jarvis.jarvis_sec.workflow", function="_create_conversion_agent"
             )
             pass
 
@@ -728,15 +728,15 @@ def analyze_from_json(
                 PrettyOutput.auto_print("🔄 [jarvis-sec] 正在重试...")
 
     # 导入必要的模块
-    from jarvis_sec.utils import prepare_candidates as _prepare_candidates
-    from jarvis_sec.clustering import (  # type: ignore[attr-defined]
+    from jarvis.jarvis_sec.utils import prepare_candidates as _prepare_candidates
+    from jarvis.jarvis_sec.clustering import (  # type: ignore[attr-defined]
         process_clustering_phase as _process_clustering_phase,
     )
-    from jarvis_sec.verification import (
+    from jarvis.jarvis_sec.verification import (
         process_verification_phase as _process_verification_phase,
     )
-    from jarvis_sec.file_manager import save_candidates
-    from jarvis_sec.report import build_json_and_markdown
+    from jarvis.jarvis_sec.file_manager import save_candidates
+    from jarvis.jarvis_sec.report import build_json_and_markdown
 
     # 创建临时分析目录
     with tempfile.TemporaryDirectory() as temp_dir:

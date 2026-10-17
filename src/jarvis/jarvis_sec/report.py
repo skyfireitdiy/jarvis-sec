@@ -61,7 +61,7 @@ from typing import cast
 
 # 依赖 Issue 结构，但本模块不直接导入 dataclass，接受 dict/Issue 两种形态
 try:
-    from jarvis_sec.types import Issue  # 类型提示用，避免循环依赖
+    from jarvis.jarvis_sec.types import Issue  # 类型提示用，避免循环依赖
 except Exception:
     Issue = Dict[str, Any]  # type: ignore
 
@@ -345,7 +345,7 @@ def build_json_and_markdown(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.report", function="build_json_and_markdown"
+                e, module="jarvis.jarvis_sec.report", function="build_json_and_markdown"
             )
             pass
 

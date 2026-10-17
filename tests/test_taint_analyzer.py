@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-jarvis_sec 污点分析测试
+jarvis.jarvis_sec 污点分析测试
 
 覆盖点：
 - 污点分析框架：TaintPath、TaintSource、TaintSink数据结构
@@ -8,12 +8,12 @@ jarvis_sec 污点分析测试
 - 污点分析集成：与启发式扫描的集成
 
 运行：
-- 使用 pytest 执行：pytest tests/jarvis_sec/test_taint_analyzer.py -v
+- 使用 pytest 执行：pytest tests/jarvis.jarvis_sec/test_taint_analyzer.py -v
 """
 
 from __future__ import annotations
 
-from jarvis_sec.taint_analyzer import (
+from jarvis.jarvis_sec.taint_analyzer import (
     TaintPath,
     TaintSource,
     TaintSink,
@@ -21,8 +21,8 @@ from jarvis_sec.taint_analyzer import (
     TAINT_RULES,
     TaintSeverity,
 )
-from jarvis_sec.joern_analyzer import JoernAnalyzer
-from jarvis_sec.checkers import analyze_c_cpp_text
+from jarvis.jarvis_sec.joern_analyzer import JoernAnalyzer
+from jarvis.jarvis_sec.checkers import analyze_c_cpp_text
 
 
 def test_taint_analyzer_data_structures():
@@ -216,7 +216,7 @@ def test_taint_analyzer_factory():
 
 def test_builtin_data_flow_analyzer_is_available():
     """测试BuiltinDataFlowAnalyzer始终可用"""
-    from jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
+    from jarvis.jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
 
     analyzer = BuiltinDataFlowAnalyzer()
     assert analyzer.is_available() is True
@@ -235,7 +235,7 @@ def test_builtin_data_flow_analyzer_registered():
 
 def test_builtin_data_flow_analyzer_analyze_no_db():
     """测试无数据库时analyze返回空列表"""
-    from jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
+    from jarvis.jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
 
     analyzer = BuiltinDataFlowAnalyzer()
     result = analyzer.analyze("int main() { return 0; }", "test.c")
@@ -244,7 +244,7 @@ def test_builtin_data_flow_analyzer_analyze_no_db():
 
 def test_builtin_data_flow_analyzer_analyze_file_no_db():
     """测试无数据库时analyze_file返回空列表"""
-    from jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
+    from jarvis.jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
 
     analyzer = BuiltinDataFlowAnalyzer()
     result = analyzer.analyze_file("/nonexistent/file.c")
@@ -253,7 +253,7 @@ def test_builtin_data_flow_analyzer_analyze_file_no_db():
 
 def test_analyze_with_best_analyzer_returns_result():
     """测试analyze_with_best_analyzer能返回结果"""
-    from jarvis_sec.taint_analyzer import analyze_with_best_analyzer
+    from jarvis.jarvis_sec.taint_analyzer import analyze_with_best_analyzer
 
     result = analyze_with_best_analyzer("int main() { return 0; }", "test.c")
     # 无数据库时返回空列表，但不应报错
@@ -262,7 +262,7 @@ def test_analyze_with_best_analyzer_returns_result():
 
 def test_builtin_data_flow_analyzer_configure():
     """测试BuiltinDataFlowAnalyzer配置sources/sinks/sanitizers"""
-    from jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
+    from jarvis.jarvis_sec.data_flow_analyzer import BuiltinDataFlowAnalyzer
 
     analyzer = BuiltinDataFlowAnalyzer()
     source = TaintSource(name="getenv", category="environment", patterns=["getenv"])

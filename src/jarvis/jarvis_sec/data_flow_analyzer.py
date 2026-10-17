@@ -18,7 +18,7 @@ from typing import List, Dict, Any, Optional, Set, Tuple
 from pathlib import Path
 from dataclasses import dataclass
 
-from jarvis_sec.taint_analyzer import (
+from jarvis.jarvis_sec.taint_analyzer import (
     TaintAnalyzer,
     TaintPath,
     TaintSource,
@@ -26,7 +26,7 @@ from jarvis_sec.taint_analyzer import (
     TaintSeverity,
     TaintAnalyzerFactory,
 )
-from jarvis_sec.project_database import ProjectDatabase
+from jarvis.jarvis_sec.project_database import ProjectDatabase
 
 
 @dataclass

@@ -6,13 +6,13 @@ from typing import Any, Dict, List, Optional, cast
 
 from jarvis.jarvis_utils.output import PrettyOutput
 
-from jarvis_sec.agents import create_review_agent
-from jarvis_sec.agents import subscribe_summary_event
-from jarvis_sec.parsers import try_parse_summary_report
-from jarvis_sec.prompts import build_verification_summary_prompt
-from jarvis_sec.prompts import get_review_summary_prompt
-from jarvis_sec.prompts import get_review_system_prompt
-from jarvis_sec.utils import git_restore_if_dirty
+from jarvis.jarvis_sec.agents import create_review_agent
+from jarvis.jarvis_sec.agents import subscribe_summary_event
+from jarvis.jarvis_sec.parsers import try_parse_summary_report
+from jarvis.jarvis_sec.prompts import build_verification_summary_prompt
+from jarvis.jarvis_sec.prompts import get_review_summary_prompt
+from jarvis.jarvis_sec.prompts import get_review_system_prompt
+from jarvis.jarvis_sec.utils import git_restore_if_dirty
 
 
 def build_review_task(
@@ -78,7 +78,7 @@ def build_gid_to_review_mapping(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.review",
+                        module="jarvis.jarvis_sec.review",
                         function="build_gid_to_review_mapping",
                     )
                     pass
@@ -91,7 +91,7 @@ def build_gid_to_review_mapping(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.review",
+                    module="jarvis.jarvis_sec.review",
                     function="build_gid_to_review_mapping",
                 )
                 pass
@@ -180,7 +180,7 @@ def process_review_batch(
                         from datetime import datetime
                         from pathlib import Path
 
-                        from jarvis_sec.file_manager import save_analysis_result
+                        from jarvis.jarvis_sec.file_manager import save_analysis_result
 
                         # 构建cluster_id
                         file_name = invalid_cluster.get("file", "")
@@ -197,7 +197,7 @@ def process_review_batch(
                             except Exception as e:
                                 save_exception(
                                     e,
-                                    module="jarvis_sec.review",
+                                    module="jarvis.jarvis_sec.review",
                                     function="process_review_batch",
                                 )
                                 pass
@@ -224,7 +224,7 @@ def process_review_batch(
                         except Exception as e:
                             save_exception(
                                 e,
-                                module="jarvis_sec.review",
+                                module="jarvis.jarvis_sec.review",
                                 function="process_review_batch",
                             )
                             pass
@@ -337,7 +337,7 @@ def run_review_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.review",
+                        module="jarvis.jarvis_sec.review",
                         function="run_review_agent_with_retry",
                     )
                     pass
@@ -357,13 +357,13 @@ def run_review_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.review",
+                        module="jarvis.jarvis_sec.review",
                         function="run_review_agent_with_retry",
                     )
                     pass
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.review", function="run_review_agent_with_retry"
+                e, module="jarvis.jarvis_sec.review", function="run_review_agent_with_retry"
             )
             pass
 
@@ -384,7 +384,7 @@ def run_review_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.review",
+                        module="jarvis.jarvis_sec.review",
                         function="run_review_agent_with_retry",
                     )
                     pass
@@ -409,7 +409,7 @@ def run_review_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.review",
+                    module="jarvis.jarvis_sec.review",
                     function="run_review_agent_with_retry",
                 )
                 pass
@@ -422,7 +422,7 @@ def run_review_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.review",
+                    module="jarvis.jarvis_sec.review",
                     function="run_review_agent_with_retry",
                 )
                 pass
@@ -557,7 +557,7 @@ def process_review_phase(
                     all_reviewed_gids.add(gid_int)
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.review", function="process_review_phase"
+                    e, module="jarvis.jarvis_sec.review", function="process_review_phase"
                 )
                 pass
 

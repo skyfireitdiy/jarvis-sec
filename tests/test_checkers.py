@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-jarvis_sec 基础单元测试（阶段一）
+jarvis.jarvis_sec 基础单元测试（阶段一）
 
 覆盖点：
 - C/C++ 启发式检查器：不安全API、内存管理、缓冲区操作、错误处理
@@ -17,12 +17,12 @@ from __future__ import annotations
 from pathlib import Path
 
 
-from jarvis_sec.checkers import (
+from jarvis.jarvis_sec.checkers import (
     analyze_c_cpp_text,
     analyze_rust_text,
 )
-from jarvis_sec.workflow import direct_scan, format_markdown_report
-from jarvis_sec.report import build_json_and_markdown
+from jarvis.jarvis_sec.workflow import direct_scan, format_markdown_report
+from jarvis.jarvis_sec.report import build_json_and_markdown
 
 
 def test_c_checker_detects_multiple_categories():

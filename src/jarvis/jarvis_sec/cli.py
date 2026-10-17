@@ -4,8 +4,8 @@ Jarvis 安全演进套件 —— 命令行入口（Typer 版本）
 
 用法示例：
 - Agent模式（单Agent，逐条子任务分析）
-  python -m jarvis_sec.cli agent --path ./target_project
-  python -m jarvis_sec.cli agent  # 默认分析当前目录
+  python -m jarvis.jarvis_sec.cli agent --path ./target_project
+  python -m jarvis.jarvis_sec.cli agent  # 默认分析当前目录
 
 可选参数：
 
@@ -28,16 +28,16 @@ from typing import Tuple
 
 import typer
 
-from jarvis_sec.report import aggregate_issues
-from jarvis_sec.report import format_csv_report
+from jarvis.jarvis_sec.report import aggregate_issues
+from jarvis.jarvis_sec.report import format_csv_report
 from jarvis.jarvis_utils.output import PrettyOutput
 
 # removed: set_config import（避免全局覆盖模型组配置）
-from jarvis_sec.workflow import direct_scan
-from jarvis_sec.workflow import (
+from jarvis.jarvis_sec.workflow import direct_scan
+from jarvis.jarvis_sec.workflow import (
     format_markdown_report as format_markdown_report_workflow,
 )
-from jarvis_sec.workflow import run_with_agent
+from jarvis.jarvis_sec.workflow import run_with_agent
 from jarvis.jarvis_utils.utils import init_env
 
 
@@ -452,10 +452,10 @@ def analyze(
     try:
         init_env()
     except Exception as e:
-        save_exception(e, module="jarvis_sec.cli", function="analyze")
+        save_exception(e, module="jarvis.jarvis_sec.cli", function="analyze")
         pass
 
-    from jarvis_sec.workflow import analyze_from_json
+    from jarvis.jarvis_sec.workflow import analyze_from_json
 
     # 设置默认值
     if cluster_limit is None:
@@ -500,8 +500,8 @@ def _parallel_analyze_file(args: Tuple[str, str, str]) -> List[Dict[str, Any]]:
     """并行分析单个文件的worker函数（用于ProcessPoolExecutor）"""
     file_path_str, target_path_str, db_path = args
     from pathlib import Path
-    from jarvis_sec.checkers.c_checker import analyze_c_cpp_file
-    from jarvis_sec.project_database import ProjectDatabase
+    from jarvis.jarvis_sec.checkers.c_checker import analyze_c_cpp_file
+    from jarvis.jarvis_sec.project_database import ProjectDatabase
 
     file_path = Path(file_path_str)
     target_path = Path(target_path_str)
@@ -516,7 +516,7 @@ def _parallel_analyze_file(args: Tuple[str, str, str]) -> List[Dict[str, Any]]:
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.cli", function="_parallel_analyze_file"
+                e, module="jarvis.jarvis_sec.cli", function="_parallel_analyze_file"
             )
             pass
 
@@ -544,8 +544,8 @@ def _parallel_analyze_file(args: Tuple[str, str, str]) -> List[Dict[str, Any]]:
 def _parallel_collect_file(args: Tuple[str, str]) -> Dict[str, Any]:
     """并行收集单个文件符号数据的worker函数"""
     file_path_str, lang = args
-    from jarvis_sec.project_database import ProjectDatabase
-    from jarvis_sec.data_collector import DataCollector
+    from jarvis.jarvis_sec.project_database import ProjectDatabase
+    from jarvis.jarvis_sec.data_collector import DataCollector
 
     # 每个子进程创建独立的内存数据库
     database = ProjectDatabase("/tmp/parallel_collect", in_memory=True)  # nosec B108 - 内存库标识符非实际落盘路径
@@ -617,7 +617,7 @@ def heuristic(
     """
     from pathlib import Path
     import json
-    from jarvis_sec.checkers.c_checker import analyze_c_cpp_file
+    from jarvis.jarvis_sec.checkers.c_checker import analyze_c_cpp_file
 
     # 如果未指定 target，从配置文件读取
     if target is None:
@@ -708,8 +708,8 @@ def heuristic(
         console = Console()
 
         # 阶段1+2：并行收集符号数据和调用关系
-        from jarvis_sec.project_database import ProjectDatabase
-        from jarvis_sec.data_collector import DataCollector
+        from jarvis.jarvis_sec.project_database import ProjectDatabase
+        from jarvis.jarvis_sec.data_collector import DataCollector
         import sqlite3
         import tempfile
 
@@ -795,7 +795,7 @@ def heuristic(
                                 database.add_type_infos_batch(result["type_infos"])
                         except Exception as e:
                             save_exception(
-                                e, module="jarvis_sec.cli", function="heuristic"
+                                e, module="jarvis.jarvis_sec.cli", function="heuristic"
                             )
                             pass
                         progress.update(
@@ -835,7 +835,7 @@ def heuristic(
                         total_symbols += len(result.get("symbols", []))
                         progress.update(task, symbols=total_symbols)
                     except Exception as e:
-                        save_exception(e, module="jarvis_sec.cli", function="heuristic")
+                        save_exception(e, module="jarvis.jarvis_sec.cli", function="heuristic")
                         pass
                     progress.advance(task)
 
@@ -869,7 +869,7 @@ def heuristic(
                         total_nodes += len(result.get("data_flow_nodes", []))
                         progress.update(task, calls=total_calls, nodes=total_nodes)
                     except Exception as e:
-                        save_exception(e, module="jarvis_sec.cli", function="heuristic")
+                        save_exception(e, module="jarvis.jarvis_sec.cli", function="heuristic")
                         pass
                     progress.advance(task)
 
@@ -930,7 +930,7 @@ def heuristic(
                                 all_issues.extend(issues)
                             except Exception as e:
                                 save_exception(
-                                    e, module="jarvis_sec.cli", function="heuristic"
+                                    e, module="jarvis.jarvis_sec.cli", function="heuristic"
                                 )
                                 pass
                             progress.update(
@@ -1164,7 +1164,7 @@ def scan() -> None:
                 f"⚠️ [jsec-scan] Agent 分析过程出错，将回退到直扫基线（fast）：{e}"
             )
         except Exception as e:
-            save_exception(e, module="jarvis_sec.cli", function="scan")
+            save_exception(e, module="jarvis.jarvis_sec.cli", function="scan")
             pass
         text = None
 
@@ -1174,7 +1174,7 @@ def scan() -> None:
                 "⚠️ [jsec-scan] Agent 无输出，回退到直扫基线（fast）。"
             )
         except Exception as e:
-            save_exception(e, module="jarvis_sec.cli", function="scan")
+            save_exception(e, module="jarvis.jarvis_sec.cli", function="scan")
             pass
         result = direct_scan(scan_dir, languages=languages, exclude_dirs=exclude_dirs)
         # 如果指定了文件过滤，过滤结果
@@ -1213,13 +1213,13 @@ def scan() -> None:
             try:
                 PrettyOutput.auto_print(f"✅ [jsec-scan] 报告已写入: {p}")
             except Exception as e:
-                save_exception(e, module="jarvis_sec.cli", function="scan")
+                save_exception(e, module="jarvis.jarvis_sec.cli", function="scan")
                 pass
         except Exception as e:
             try:
                 PrettyOutput.auto_print(f"❌ [jsec-scan] 写入报告失败: {e}")
             except Exception as e:
-                save_exception(e, module="jarvis_sec.cli", function="scan")
+                save_exception(e, module="jarvis.jarvis_sec.cli", function="scan")
                 pass
     PrettyOutput.auto_print(text)
 

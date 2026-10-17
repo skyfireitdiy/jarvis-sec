@@ -11,16 +11,16 @@ from typing import cast
 from jarvis.jarvis_agent import Agent
 from jarvis.jarvis_utils.output import PrettyOutput
 from jarvis.jarvis_utils.tag import ot
-from jarvis_sec.agents import create_analysis_agent
-from jarvis_sec.agents import subscribe_summary_event
-from jarvis_sec.analysis import build_analysis_task_context
-from jarvis_sec.analysis import expand_and_filter_analysis_results
-from jarvis_sec.analysis import run_analysis_agent_with_retry
-from jarvis_sec.parsers import try_parse_summary_report
-from jarvis_sec.prompts import build_verification_summary_prompt
-from jarvis_sec.utils import count_issues_from_file
-from jarvis_sec.utils import git_restore_if_dirty
-from jarvis_sec.utils import sig_of
+from jarvis.jarvis_sec.agents import create_analysis_agent
+from jarvis.jarvis_sec.agents import subscribe_summary_event
+from jarvis.jarvis_sec.analysis import build_analysis_task_context
+from jarvis.jarvis_sec.analysis import expand_and_filter_analysis_results
+from jarvis.jarvis_sec.analysis import run_analysis_agent_with_retry
+from jarvis.jarvis_sec.parsers import try_parse_summary_report
+from jarvis.jarvis_sec.prompts import build_verification_summary_prompt
+from jarvis.jarvis_sec.utils import count_issues_from_file
+from jarvis.jarvis_sec.utils import git_restore_if_dirty
+from jarvis.jarvis_sec.utils import sig_of
 from jarvis.jarvis_tools.registry import ToolRegistry
 
 
@@ -47,7 +47,7 @@ def build_gid_to_verification_mapping(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="build_gid_to_verification_mapping",
                         )
                         pass
@@ -65,7 +65,7 @@ def build_gid_to_verification_mapping(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="build_gid_to_verification_mapping",
                         )
                         pass
@@ -77,7 +77,7 @@ def build_gid_to_verification_mapping(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="build_gid_to_verification_mapping",
                     )
                     pass
@@ -89,7 +89,7 @@ def build_gid_to_verification_mapping(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="build_gid_to_verification_mapping",
                 )
                 pass
@@ -118,7 +118,7 @@ def merge_verified_items(
                 gid_to_candidate[c_gid] = c
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.verification", function="merge_verified_items"
+                e, module="jarvis.jarvis_sec.verification", function="merge_verified_items"
             )
             pass
 
@@ -144,7 +144,7 @@ def merge_verified_items(
                 )
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.verification", function="merge_verified_items"
+                    e, module="jarvis.jarvis_sec.verification", function="merge_verified_items"
                 )
                 pass
         else:
@@ -154,7 +154,7 @@ def merge_verified_items(
                 )
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.verification", function="merge_verified_items"
+                    e, module="jarvis.jarvis_sec.verification", function="merge_verified_items"
                 )
                 pass
     return verified_items
@@ -174,7 +174,7 @@ def merge_verified_items_without_verification(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.verification",
+                module="jarvis.jarvis_sec.verification",
                 function="merge_verified_items_without_verification",
             )
             pass
@@ -270,7 +270,7 @@ def run_verification_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="run_verification_agent_with_retry",
                     )
                     pass
@@ -289,14 +289,14 @@ def run_verification_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="run_verification_agent_with_retry",
                     )
                     pass
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.verification",
+                module="jarvis.jarvis_sec.verification",
                 function="run_verification_agent_with_retry",
             )
             pass
@@ -317,7 +317,7 @@ def run_verification_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="run_verification_agent_with_retry",
                     )
                     pass
@@ -340,7 +340,7 @@ def run_verification_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="run_verification_agent_with_retry",
                 )
                 pass
@@ -352,7 +352,7 @@ def run_verification_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="run_verification_agent_with_retry",
                 )
                 pass
@@ -418,7 +418,7 @@ def process_verification_batch(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="process_verification_batch",
                 )
                 pass
@@ -439,7 +439,7 @@ def process_verification_batch(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.verification", function="process_verification_batch"
+            e, module="jarvis.jarvis_sec.verification", function="process_verification_batch"
         )
         pass
 
@@ -491,7 +491,7 @@ def process_verification_batch(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="process_verification_batch",
                     )
                     pass
@@ -517,7 +517,7 @@ def process_verification_batch(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="process_verification_batch",
                 )
                 pass
@@ -560,7 +560,7 @@ def process_verification_batch(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="process_verification_batch",
                 )
                 pass
@@ -586,7 +586,7 @@ def process_verification_batch(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="process_verification_batch",
                         )
                         pass
@@ -598,7 +598,7 @@ def process_verification_batch(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="process_verification_batch",
                     )
                     pass
@@ -728,7 +728,7 @@ def process_verification_batch(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="process_verification_batch",
                         )
                         pass
@@ -740,7 +740,7 @@ def process_verification_batch(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="process_verification_batch",
                         )
                         pass
@@ -752,7 +752,7 @@ def process_verification_batch(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="process_verification_batch",
                         )
                         pass
@@ -764,7 +764,7 @@ def process_verification_batch(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.verification",
+                            module="jarvis.jarvis_sec.verification",
                             function="process_verification_batch",
                         )
                         pass
@@ -825,7 +825,7 @@ def process_verification_batch(
                         except Exception as e:
                             save_exception(
                                 e,
-                                module="jarvis_sec.verification",
+                                module="jarvis.jarvis_sec.verification",
                                 function="process_verification_batch",
                             )
                             pass
@@ -837,7 +837,7 @@ def process_verification_batch(
                         except Exception as e:
                             save_exception(
                                 e,
-                                module="jarvis_sec.verification",
+                                module="jarvis.jarvis_sec.verification",
                                 function="process_verification_batch",
                             )
                             pass
@@ -987,8 +987,8 @@ def process_verification_phase(
     force_save_memory: bool = False,
 ) -> List[Dict[str, Any]]:
     """处理验证阶段，返回所有已保存的告警"""
-    from jarvis_sec.file_manager import get_all_analyzed_gids
-    from jarvis_sec.file_manager import load_analysis_results
+    from jarvis.jarvis_sec.file_manager import get_all_analyzed_gids
+    from jarvis.jarvis_sec.file_manager import load_analysis_results
 
     batches: List[List[Dict[str, Any]]] = cluster_batches
     total_batches = len(batches)
@@ -1012,7 +1012,7 @@ def process_verification_phase(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.verification",
+                module="jarvis.jarvis_sec.verification",
                 function="process_verification_phase",
             )
             pass
@@ -1025,7 +1025,7 @@ def process_verification_phase(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.verification",
+                module="jarvis.jarvis_sec.verification",
                 function="process_verification_phase",
             )
             pass
@@ -1034,7 +1034,7 @@ def process_verification_phase(
     gid_counts: Dict[int, int] = {}
 
     # 加载 clusters.jsonl 以匹配批次和聚类
-    from jarvis_sec.file_manager import load_clusters
+    from jarvis.jarvis_sec.file_manager import load_clusters
 
     clusters = load_clusters(sec_dir)
 
@@ -1057,7 +1057,7 @@ def process_verification_phase(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.verification",
+                module="jarvis.jarvis_sec.verification",
                 function="process_verification_phase",
             )
             pass
@@ -1080,7 +1080,7 @@ def process_verification_phase(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.verification",
+                    module="jarvis.jarvis_sec.verification",
                     function="process_verification_phase",
                 )
                 pass
@@ -1103,7 +1103,7 @@ def process_verification_phase(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.verification",
+                        module="jarvis.jarvis_sec.verification",
                         function="process_verification_phase",
                     )
                     pass
@@ -1144,7 +1144,7 @@ def process_verification_phase(
                     )
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.verification", function="normalize_path"
+                        e, module="jarvis.jarvis_sec.verification", function="normalize_path"
                     )
                     pass
 
@@ -1157,7 +1157,7 @@ def process_verification_phase(
                 )
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.verification", function="normalize_path"
+                    e, module="jarvis.jarvis_sec.verification", function="normalize_path"
                 )
                 pass
         else:
@@ -1172,7 +1172,7 @@ def process_verification_phase(
                     )
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.verification", function="normalize_path"
+                        e, module="jarvis.jarvis_sec.verification", function="normalize_path"
                     )
                     pass
             pending_batches.append((bidx, batch))
@@ -1189,7 +1189,7 @@ def process_verification_phase(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.verification", function="normalize_path"
+                e, module="jarvis.jarvis_sec.verification", function="normalize_path"
             )
             pass
 
@@ -1224,8 +1224,8 @@ def process_verification_phase(
         )
 
     # 从 analysis.jsonl 读取所有已验证的问题
-    from jarvis_sec.file_manager import get_verified_issue_gids
-    from jarvis_sec.file_manager import load_candidates
+    from jarvis.jarvis_sec.file_manager import get_verified_issue_gids
+    from jarvis.jarvis_sec.file_manager import load_candidates
 
     get_verified_issue_gids(sec_dir)
     load_candidates(sec_dir)

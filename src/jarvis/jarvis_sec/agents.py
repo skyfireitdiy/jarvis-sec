@@ -5,11 +5,11 @@ from jarvis.jarvis_utils.exception_utils import save_exception
 from typing import Any, Dict
 
 from jarvis.jarvis_agent import Agent
-from jarvis_sec.prompts import build_summary_prompt
-from jarvis_sec.prompts import get_cluster_summary_prompt
-from jarvis_sec.prompts import get_cluster_system_prompt
-from jarvis_sec.prompts import get_review_summary_prompt
-from jarvis_sec.prompts import get_review_system_prompt
+from jarvis.jarvis_sec.prompts import build_summary_prompt
+from jarvis.jarvis_sec.prompts import get_cluster_summary_prompt
+from jarvis.jarvis_sec.prompts import get_cluster_system_prompt
+from jarvis.jarvis_sec.prompts import get_review_summary_prompt
+from jarvis.jarvis_sec.prompts import get_review_system_prompt
 from jarvis.jarvis_tools.registry import ToolRegistry
 from jarvis.jarvis_utils.tag import ot
 
@@ -33,7 +33,7 @@ def subscribe_summary_event(agent: Agent) -> Dict[str, str]:
         try:
             agent.event_bus.subscribe(_AFTER_SUMMARY, _on_after_summary)
         except Exception as e:
-            save_exception(e, module="jarvis_sec.agents", function="_on_after_summary")
+            save_exception(e, module="jarvis.jarvis_sec.agents", function="_on_after_summary")
             pass
     return summary_container
 

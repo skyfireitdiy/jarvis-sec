@@ -7,9 +7,9 @@ from typing import Any, Dict, List, Optional, cast
 from jarvis.jarvis_utils.output import PrettyOutput
 
 from jarvis.jarvis_agent import Agent
-from jarvis_sec.parsers import try_parse_summary_report
-from jarvis_sec.prompts import build_summary_prompt
-from jarvis_sec.utils import git_restore_if_dirty
+from jarvis.jarvis_sec.parsers import try_parse_summary_report
+from jarvis.jarvis_sec.prompts import build_summary_prompt
+from jarvis.jarvis_sec.utils import git_restore_if_dirty
 
 
 def _build_detailed_error_guidance(
@@ -214,7 +214,7 @@ def run_analysis_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.analysis",
+                        module="jarvis.jarvis_sec.analysis",
                         function="run_analysis_agent_with_retry",
                     )
                     pass
@@ -246,14 +246,14 @@ def run_analysis_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.analysis",
+                        module="jarvis.jarvis_sec.analysis",
                         function="run_analysis_agent_with_retry",
                     )
                     pass
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.analysis",
+                module="jarvis.jarvis_sec.analysis",
                 function="run_analysis_agent_with_retry",
             )
             pass
@@ -272,7 +272,7 @@ def run_analysis_agent_with_retry(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.analysis",
+                        module="jarvis.jarvis_sec.analysis",
                         function="run_analysis_agent_with_retry",
                     )
                     pass
@@ -307,7 +307,7 @@ def run_analysis_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.analysis",
+                    module="jarvis.jarvis_sec.analysis",
                     function="run_analysis_agent_with_retry",
                 )
                 pass
@@ -319,7 +319,7 @@ def run_analysis_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.analysis",
+                    module="jarvis.jarvis_sec.analysis",
                     function="run_analysis_agent_with_retry",
                 )
                 pass
@@ -354,7 +354,7 @@ def expand_and_filter_analysis_results(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.analysis",
+                        module="jarvis.jarvis_sec.analysis",
                         function="expand_and_filter_analysis_results",
                     )
                     pass

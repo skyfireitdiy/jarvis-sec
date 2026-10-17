@@ -32,14 +32,12 @@ dev = [
 joern = []
 
 [project.scripts]
-jarvis-sec = "jarvis_sec.cli:main"
-jsec = "jarvis_sec.cli:main"
+jarvis-sec = "jarvis.jarvis_sec.cli:main"
+jsec = "jarvis.jarvis_sec.cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-jarvis_sec = ["py.typed"]
+[tool.setuptools]
+packages = ["jarvis.jarvis_sec"]
+package-dir = { "" = "src" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

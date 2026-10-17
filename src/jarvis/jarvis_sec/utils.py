@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from jarvis.jarvis_utils.output import PrettyOutput
 from jarvis.jarvis_utils.utils import decode_output
 
-from jarvis_sec.workflow import direct_scan
+from jarvis.jarvis_sec.workflow import direct_scan
 
 
 def git_restore_if_dirty(repo_root: str) -> int:
@@ -43,7 +43,7 @@ def git_restore_if_dirty(repo_root: str) -> int:
             )
             return len(lines)
     except Exception as e:
-        save_exception(e, module="jarvis_sec.utils", function="git_restore_if_dirty")
+        save_exception(e, module="jarvis.jarvis_sec.utils", function="git_restore_if_dirty")
         pass
     return 0
 
@@ -97,8 +97,8 @@ def load_or_run_heuristic_scan(
     summary: Dict[str, Any] = {}
 
     # 优先使用新的 candidates.jsonl 文件
-    from jarvis_sec.file_manager import get_candidates_file
-    from jarvis_sec.file_manager import load_candidates
+    from jarvis.jarvis_sec.file_manager import get_candidates_file
+    from jarvis.jarvis_sec.file_manager import load_candidates
 
     candidates = load_candidates(sec_dir)
 
@@ -117,7 +117,7 @@ def load_or_run_heuristic_scan(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.utils", function="load_or_run_heuristic_scan"
+                e, module="jarvis.jarvis_sec.utils", function="load_or_run_heuristic_scan"
             )
             pass
     else:
@@ -193,7 +193,7 @@ def load_or_run_heuristic_scan(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.utils", function="load_or_run_heuristic_scan"
+                e, module="jarvis.jarvis_sec.utils", function="load_or_run_heuristic_scan"
             )
             pass
     else:
@@ -225,7 +225,7 @@ def compact_candidate(it: Dict[str, Any]) -> Dict[str, Any]:
             if gid_val >= 1:
                 result["gid"] = gid_val
         except Exception as e:
-            save_exception(e, module="jarvis_sec.utils", function="compact_candidate")
+            save_exception(e, module="jarvis.jarvis_sec.utils", function="compact_candidate")
             pass
     return result
 
@@ -255,7 +255,7 @@ def prepare_candidates(candidates: List[Dict[str, Any]]) -> List[Dict[str, Any]]
                     existing_gids.add(gid_val)
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.utils", function="prepare_candidates"
+                    e, module="jarvis.jarvis_sec.utils", function="prepare_candidates"
                 )
                 pass
 
@@ -276,7 +276,7 @@ def prepare_candidates(candidates: List[Dict[str, Any]]) -> List[Dict[str, Any]]
                     next_gid += 1
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.utils", function="prepare_candidates"
+                        e, module="jarvis.jarvis_sec.utils", function="prepare_candidates"
                     )
                     pass
 
@@ -297,8 +297,8 @@ def group_candidates_by_file(
 
 def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
     """创建报告写入函数"""
-    from jarvis_sec.file_manager import load_clusters
-    from jarvis_sec.file_manager import save_analysis_result
+    from jarvis.jarvis_sec.file_manager import load_clusters
+    from jarvis.jarvis_sec.file_manager import save_analysis_result
 
     def _append_report(
         items: List[Dict[str, Any]], source: str, task_id: str, cand: Dict[str, Any]
@@ -337,7 +337,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                     )
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.utils", function="_append_report"
+                        e, module="jarvis.jarvis_sec.utils", function="_append_report"
                     )
                     pass
                 return
@@ -352,7 +352,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                         batch_gids.append(gid)
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.utils", function="_append_report"
+                        e, module="jarvis.jarvis_sec.utils", function="_append_report"
                     )
                     pass
 
@@ -367,7 +367,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                 if "Batch-" in task_id:
                     batch_index = int(task_id.split("Batch-")[1])
             except Exception as e:
-                save_exception(e, module="jarvis_sec.utils", function="_append_report")
+                save_exception(e, module="jarvis.jarvis_sec.utils", function="_append_report")
                 pass
 
             # 查找匹配的聚类（通过 file 和 gids）
@@ -410,7 +410,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                             false_positives.append(item)  # 记录误报详情
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.utils", function="_append_report"
+                        e, module="jarvis.jarvis_sec.utils", function="_append_report"
                     )
                     pass
 
@@ -428,7 +428,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                         false_positives.append(c)  # 记录候选问题作为误报详情
                 except Exception as e:
                     save_exception(
-                        e, module="jarvis_sec.utils", function="_append_report"
+                        e, module="jarvis.jarvis_sec.utils", function="_append_report"
                     )
                     pass
 
@@ -446,7 +446,7 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
 
             # 保存误报详情到单独文件
             if false_positives:
-                from jarvis_sec.file_manager import save_false_positives
+                from jarvis.jarvis_sec.file_manager import save_false_positives
 
                 save_false_positives(sec_dir, false_positives)
 
@@ -459,14 +459,14 @@ def create_report_writer(sec_dir: Path, report_file: Optional[str]) -> Any:
                     timestamp=True,
                 )
             except Exception as e:
-                save_exception(e, module="jarvis_sec.utils", function="_append_report")
+                save_exception(e, module="jarvis.jarvis_sec.utils", function="_append_report")
                 pass
         except Exception as e:
             # 报告写入失败不影响主流程
             try:
                 PrettyOutput.auto_print(f"⚠️ [jarvis-sec] 警告：保存分析结果失败: {e}")
             except Exception as e:
-                save_exception(e, module="jarvis_sec.utils", function="_append_report")
+                save_exception(e, module="jarvis.jarvis_sec.utils", function="_append_report")
                 pass
 
     return _append_report
@@ -496,7 +496,7 @@ def load_processed_gids_from_issues(sec_dir: Path) -> Set[int]:
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.utils",
+                            module="jarvis.jarvis_sec.utils",
                             function="load_processed_gids_from_issues",
                         )
                         pass
@@ -509,13 +509,13 @@ def load_processed_gids_from_issues(sec_dir: Path) -> Set[int]:
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.utils",
+                        module="jarvis.jarvis_sec.utils",
                         function="load_processed_gids_from_issues",
                     )
                     pass
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.utils", function="load_processed_gids_from_issues"
+            e, module="jarvis.jarvis_sec.utils", function="load_processed_gids_from_issues"
         )
         pass
     return processed_gids
@@ -523,7 +523,7 @@ def load_processed_gids_from_issues(sec_dir: Path) -> Set[int]:
 
 def count_issues_from_file(sec_dir: Path) -> int:
     """从 analysis.jsonl 读取问题数量"""
-    from jarvis_sec.file_manager import get_verified_issue_gids
+    from jarvis.jarvis_sec.file_manager import get_verified_issue_gids
 
     verified_gids = get_verified_issue_gids(sec_dir)
     return len(verified_gids)
@@ -555,13 +555,13 @@ def count_issues_from_file_old(sec_dir: Path) -> int:
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.utils",
+                            module="jarvis.jarvis_sec.utils",
                             function="count_issues_from_file_old",
                         )
                         pass
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.utils", function="count_issues_from_file_old"
+            e, module="jarvis.jarvis_sec.utils", function="count_issues_from_file_old"
         )
         pass
     return count
@@ -593,7 +593,7 @@ def load_all_issues_from_file(sec_dir: Path) -> List[Dict[str, Any]]:
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.utils",
+                            module="jarvis.jarvis_sec.utils",
                             function="load_all_issues_from_file",
                         )
                         pass
@@ -607,7 +607,7 @@ def load_all_issues_from_file(sec_dir: Path) -> List[Dict[str, Any]]:
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.utils",
+                        module="jarvis.jarvis_sec.utils",
                         function="load_all_issues_from_file",
                     )
                     pass
@@ -619,7 +619,7 @@ def load_all_issues_from_file(sec_dir: Path) -> List[Dict[str, Any]]:
                 )
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.utils", function="load_all_issues_from_file"
+                    e, module="jarvis.jarvis_sec.utils", function="load_all_issues_from_file"
                 )
                 pass
     except Exception as e:
@@ -631,7 +631,7 @@ def load_all_issues_from_file(sec_dir: Path) -> List[Dict[str, Any]]:
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.utils", function="load_all_issues_from_file"
+                e, module="jarvis.jarvis_sec.utils", function="load_all_issues_from_file"
             )
             pass
     return all_issues
@@ -656,14 +656,14 @@ def load_processed_gids_from_agent_issues(sec_dir: Path) -> Set[int]:
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.utils",
+                            module="jarvis.jarvis_sec.utils",
                             function="load_processed_gids_from_agent_issues",
                         )
                         pass
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.utils",
+            module="jarvis.jarvis_sec.utils",
             function="load_processed_gids_from_agent_issues",
         )
         pass

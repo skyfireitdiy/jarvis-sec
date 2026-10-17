@@ -25,26 +25,26 @@ from typing import Any, Dict, List, Optional
 from jarvis.jarvis_utils.output import PrettyOutput
 
 from jarvis.jarvis_agent import Agent  # noqa: F401
-from jarvis_sec.utils import (
+from jarvis.jarvis_sec.utils import (
     initialize_analysis_context as _initialize_analysis_context,
 )
-from jarvis_sec.utils import (
+from jarvis.jarvis_sec.utils import (
     load_or_run_heuristic_scan as _load_or_run_heuristic_scan,
 )
-from jarvis_sec.utils import prepare_candidates as _prepare_candidates
-from jarvis_sec.utils import (
+from jarvis.jarvis_sec.utils import prepare_candidates as _prepare_candidates
+from jarvis.jarvis_sec.utils import (
     group_candidates_by_file as _group_candidates_by_file,
 )
-from jarvis_sec.utils import create_report_writer as _create_report_writer
-from jarvis_sec.clustering import (  # type: ignore[attr-defined]
+from jarvis.jarvis_sec.utils import create_report_writer as _create_report_writer
+from jarvis.jarvis_sec.clustering import (  # type: ignore[attr-defined]
     process_clustering_phase as _process_clustering_phase,
 )
-from jarvis_sec.verification import (
+from jarvis.jarvis_sec.verification import (
     process_verification_phase as _process_verification_phase,
 )
 
-from jarvis_sec.workflow import direct_scan
-from jarvis_sec.workflow import run_with_agent
+from jarvis.jarvis_sec.workflow import direct_scan
+from jarvis.jarvis_sec.workflow import run_with_agent
 
 # 注：当前版本不使用 MultiAgent 编排，已移除默认多智能体配置与创建函数。
 # 请使用 run_security_analysis（单Agent逐条验证）或 workflow.direct_scan + format_markdown_report（直扫基线）。
@@ -125,8 +125,8 @@ def run_security_analysis(
     compact_candidates = _prepare_candidates(candidates)
 
     # 3) 保存候选到新的 candidates.jsonl 文件（包含gid）
-    from jarvis_sec.file_manager import get_candidates_file
-    from jarvis_sec.file_manager import save_candidates
+    from jarvis.jarvis_sec.file_manager import get_candidates_file
+    from jarvis.jarvis_sec.file_manager import save_candidates
 
     try:
         save_candidates(sec_dir, compact_candidates)
@@ -138,7 +138,7 @@ def run_security_analysis(
             }
         )
     except Exception as e:
-        save_exception(e, module="jarvis_sec.__init__", function="mark_error")
+        save_exception(e, module="jarvis.jarvis_sec.__init__", function="mark_error")
         pass
 
     # 记录批次选择信息（可选，用于日志）
@@ -151,7 +151,7 @@ def run_security_analysis(
                     f"[jarvis-sec] 批次选择: 文件={selected_file} 数量={len(items)}"
                 )
             except Exception as e:
-                save_exception(e, module="jarvis_sec.__init__", function="mark_error")
+                save_exception(e, module="jarvis.jarvis_sec.__init__", function="mark_error")
                 pass
             _progress_append(
                 {
@@ -162,7 +162,7 @@ def run_security_analysis(
                 }
             )
     except Exception as e:
-        save_exception(e, module="jarvis_sec.__init__", function="mark_error")
+        save_exception(e, module="jarvis.jarvis_sec.__init__", function="mark_error")
         pass
 
     # 创建报告写入函数
@@ -196,7 +196,7 @@ def run_security_analysis(
 
     # 5) 使用统一聚合器生成最终报告（JSON + Markdown）
     try:
-        from jarvis_sec.report import build_json_and_markdown
+        from jarvis.jarvis_sec.report import build_json_and_markdown
 
         result = build_json_and_markdown(
             all_issues,  # type: ignore

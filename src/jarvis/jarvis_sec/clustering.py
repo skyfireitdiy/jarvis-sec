@@ -11,16 +11,16 @@ from typing import List
 from typing import Optional
 
 
-from jarvis_sec.agents import create_cluster_agent
-from jarvis_sec.agents import subscribe_summary_event
-from jarvis_sec.file_manager import get_all_clustered_gids
-from jarvis_sec.file_manager import get_clusters_file
-from jarvis_sec.file_manager import load_clusters
-from jarvis_sec.file_manager import save_cluster
-from jarvis_sec.file_manager import validate_clustering_completeness
-from jarvis_sec.parsers import parse_clusters_from_text
-from jarvis_sec.prompts import get_cluster_summary_prompt
-from jarvis_sec.utils import group_candidates_by_file
+from jarvis.jarvis_sec.agents import create_cluster_agent
+from jarvis.jarvis_sec.agents import subscribe_summary_event
+from jarvis.jarvis_sec.file_manager import get_all_clustered_gids
+from jarvis.jarvis_sec.file_manager import get_clusters_file
+from jarvis.jarvis_sec.file_manager import load_clusters
+from jarvis.jarvis_sec.file_manager import save_cluster
+from jarvis.jarvis_sec.file_manager import validate_clustering_completeness
+from jarvis.jarvis_sec.parsers import parse_clusters_from_text
+from jarvis.jarvis_sec.prompts import get_cluster_summary_prompt
+from jarvis.jarvis_sec.utils import group_candidates_by_file
 from jarvis.jarvis_utils.output import PrettyOutput
 
 
@@ -55,7 +55,7 @@ def load_existing_clusters(
                     gids_list = cluster.get("gids", [])
                     if isinstance(gids_list, list):
                         # 检查这些gid是否都在分析结果中被标记为误报
-                        from jarvis_sec.file_manager import (
+                        from jarvis.jarvis_sec.file_manager import (
                             get_false_positive_gids,
                         )
 
@@ -74,7 +74,7 @@ def load_existing_clusters(
                                 except Exception as e:
                                     save_exception(
                                         e,
-                                        module="jarvis_sec.clustering",
+                                        module="jarvis.jarvis_sec.clustering",
                                         function="load_existing_clusters",
                                     )
                                     pass
@@ -112,7 +112,7 @@ def restore_clusters_from_checkpoint(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="restore_clusters_from_checkpoint",
                 )
                 pass
@@ -142,7 +142,7 @@ def restore_clusters_from_checkpoint(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.clustering",
+                            module="jarvis.jarvis_sec.clustering",
                             function="restore_clusters_from_checkpoint",
                         )
                         pass
@@ -192,7 +192,7 @@ def restore_clusters_from_checkpoint(
                                         except Exception as e:
                                             save_exception(
                                                 e,
-                                                module="jarvis_sec.clustering",
+                                                module="jarvis.jarvis_sec.clustering",
                                                 function="restore_clusters_from_checkpoint",
                                             )
                                             pass
@@ -217,7 +217,7 @@ def restore_clusters_from_checkpoint(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.clustering",
+                        module="jarvis.jarvis_sec.clustering",
                         function="restore_clusters_from_checkpoint",
                     )
                     pass
@@ -241,7 +241,7 @@ def restore_clusters_from_checkpoint(
                         except Exception as e:
                             save_exception(
                                 e,
-                                module="jarvis_sec.clustering",
+                                module="jarvis.jarvis_sec.clustering",
                                 function="restore_clusters_from_checkpoint",
                             )
                             pass
@@ -291,7 +291,7 @@ def restore_clusters_from_checkpoint(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="restore_clusters_from_checkpoint",
             )
             pass
@@ -303,7 +303,7 @@ def restore_clusters_from_checkpoint(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="restore_clusters_from_checkpoint",
             )
             pass
@@ -327,7 +327,7 @@ def restore_clusters_from_checkpoint(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="restore_clusters_from_checkpoint",
             )
             pass
@@ -385,7 +385,7 @@ def create_cluster_snapshot_writer(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="_write_cluster_batch_snapshot",
             )
             pass
@@ -426,7 +426,7 @@ def create_cluster_snapshot_writer(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="_write_cluster_report_snapshot",
             )
             pass
@@ -445,7 +445,7 @@ def collect_candidate_gids(file_groups: Dict[str, List[Dict[str, Any]]]) -> set[
                     all_gids.add(_gid)
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.clustering", function="collect_candidate_gids"
+                    e, module="jarvis.jarvis_sec.clustering", function="collect_candidate_gids"
                 )
                 pass
     return all_gids
@@ -465,7 +465,7 @@ def collect_clustered_gids(
                     all_clustered_gids.add(_gid)
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.clustering", function="collect_clustered_gids"
+                    e, module="jarvis.jarvis_sec.clustering", function="collect_clustered_gids"
                 )
                 pass
     # 也收集无效聚类中的 gid（它们已经进入复核流程）
@@ -478,7 +478,7 @@ def collect_clustered_gids(
                     all_clustered_gids.add(_gid_int)
             except Exception as e:
                 save_exception(
-                    e, module="jarvis_sec.clustering", function="collect_clustered_gids"
+                    e, module="jarvis.jarvis_sec.clustering", function="collect_clustered_gids"
                 )
                 pass
     return all_clustered_gids
@@ -504,7 +504,7 @@ def filter_single_gid_clusters(
     removed_gids = set[int]()
 
     # 读取已分析的gid（从analysis.jsonl）
-    from jarvis_sec.file_manager import get_all_analyzed_gids
+    from jarvis.jarvis_sec.file_manager import get_all_analyzed_gids
 
     processed_gids = set[int](get_all_analyzed_gids(sec_dir))
 
@@ -564,7 +564,7 @@ def filter_single_gid_clusters(
                             except Exception as e:
                                 save_exception(
                                     e,
-                                    module="jarvis_sec.clustering",
+                                    module="jarvis.jarvis_sec.clustering",
                                     function="filter_single_gid_clusters",
                                 )
                                 pass
@@ -575,7 +575,7 @@ def filter_single_gid_clusters(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="filter_single_gid_clusters",
                 )
                 pass
@@ -605,7 +605,7 @@ def filter_single_gid_clusters(
                 )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="filter_single_gid_clusters"
+                e, module="jarvis.jarvis_sec.clustering", function="filter_single_gid_clusters"
             )
             pass
 
@@ -747,7 +747,7 @@ def extract_classified_gids(cluster_items: List[Dict[str, Any]]) -> set[int]:
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.clustering",
+                            module="jarvis.jarvis_sec.clustering",
                             function="extract_classified_gids",
                         )
                         pass
@@ -826,7 +826,7 @@ def run_cluster_agent_direct_model(
         except Exception as e:
             save_exception(
                 e,
-                module="jarvis_sec.clustering",
+                module="jarvis.jarvis_sec.clustering",
                 function="run_cluster_agent_direct_model",
             )
             pass
@@ -925,7 +925,7 @@ def run_cluster_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="run_cluster_agent_with_retry",
                 )
                 pass
@@ -959,7 +959,7 @@ def run_cluster_agent_with_retry(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="run_cluster_agent_with_retry",
                 )
                 pass
@@ -991,7 +991,7 @@ def process_cluster_results(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="process_cluster_results",
                 )
                 pass
@@ -1017,7 +1017,7 @@ def process_cluster_results(
                 except Exception as e:
                     save_exception(
                         e,
-                        module="jarvis_sec.clustering",
+                        module="jarvis.jarvis_sec.clustering",
                         function="process_cluster_results",
                     )
                     pass
@@ -1041,7 +1041,7 @@ def process_cluster_results(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="process_cluster_results",
                 )
                 pass
@@ -1153,7 +1153,7 @@ def extract_input_gids(pending_in_file_with_ids: List[Dict[str, Any]]) -> set[in
                 input_gids.add(_gid)
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="extract_input_gids"
+                e, module="jarvis.jarvis_sec.clustering", function="extract_input_gids"
             )
             pass
     return input_gids
@@ -1173,13 +1173,13 @@ def build_gid_to_item_mapping(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="build_gid_to_item_mapping",
                 )
                 pass
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.clustering", function="build_gid_to_item_mapping"
+            e, module="jarvis.jarvis_sec.clustering", function="build_gid_to_item_mapping"
         )
         pass
     return gid_to_item
@@ -1258,7 +1258,7 @@ def process_cluster_chunk(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="process_cluster_chunk"
+                e, module="jarvis.jarvis_sec.clustering", function="process_cluster_chunk"
             )
             pass
         cluster_agent = create_cluster_agent(
@@ -1337,7 +1337,7 @@ def process_cluster_chunk(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="process_cluster_chunk"
+                e, module="jarvis.jarvis_sec.clustering", function="process_cluster_chunk"
             )
             pass
 
@@ -1363,7 +1363,7 @@ def filter_pending_items(
                 pending_in_file.append(c)
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="filter_pending_items"
+                e, module="jarvis.jarvis_sec.clustering", function="filter_pending_items"
             )
             pass
     return pending_in_file
@@ -1504,7 +1504,7 @@ def check_unclustered_gids(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="check_unclustered_gids"
+                e, module="jarvis.jarvis_sec.clustering", function="check_unclustered_gids"
             )
             pass
     else:
@@ -1514,7 +1514,7 @@ def check_unclustered_gids(
             )
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="check_unclustered_gids"
+                e, module="jarvis.jarvis_sec.clustering", function="check_unclustered_gids"
             )
             pass
     return unclustered_gids
@@ -1591,7 +1591,7 @@ def record_clustering_completion(
         )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.clustering", function="record_clustering_completion"
+            e, module="jarvis.jarvis_sec.clustering", function="record_clustering_completion"
         )
         pass
 
@@ -1615,7 +1615,7 @@ def fallback_to_file_based_batches(
             except Exception as e:
                 save_exception(
                     e,
-                    module="jarvis_sec.clustering",
+                    module="jarvis.jarvis_sec.clustering",
                     function="fallback_to_file_based_batches",
                 )
                 pass
@@ -1637,7 +1637,7 @@ def fallback_to_file_based_batches(
                     except Exception as e:
                         save_exception(
                             e,
-                            module="jarvis_sec.clustering",
+                            module="jarvis.jarvis_sec.clustering",
                             function="fallback_to_file_based_batches",
                         )
                         pass
@@ -1715,7 +1715,7 @@ def process_clustering_phase(
     )
 
     # 复核Agent：验证所有标记为无效的聚类（需要从review模块导入）
-    from jarvis_sec.review import process_review_phase
+    from jarvis.jarvis_sec.review import process_review_phase
 
     cluster_batches = process_review_phase(
         invalid_clusters_for_review,
@@ -1755,7 +1755,7 @@ def process_clustering_phase(
 
         except Exception as e:
             save_exception(
-                e, module="jarvis_sec.clustering", function="process_clustering_phase"
+                e, module="jarvis.jarvis_sec.clustering", function="process_clustering_phase"
             )
             pass
 

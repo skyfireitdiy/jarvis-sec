@@ -7,11 +7,11 @@ Jarvis 安全分析套件 —— Rust 启发式安全检查器
 - 提供可解释的启发式检测与置信度评估，面向 .rs 源文件。
 
 输出约定：
-- 返回 jarvis_sec.workflow.Issue 列表（结构化，便于聚合评分与报告生成）。
+- 返回 jarvis.jarvis_sec.workflow.Issue 列表（结构化，便于聚合评分与报告生成）。
 - 置信度区间 [0,1]；严重性（severity）分为 high/medium/low。
 
 使用方式：
-- from jarvis_sec.checkers.rust_checker import analyze_rust_files
+- from jarvis.jarvis_sec.checkers.rust_checker import analyze_rust_files
 - issues = analyze_rust_files("./repo", ["src/lib.rs", "src/foo.rs"])
 """
 
@@ -28,16 +28,16 @@ from typing import Sequence
 from typing import Tuple
 from typing import TYPE_CHECKING
 
-from jarvis_sec.types import Issue
+from jarvis.jarvis_sec.types import Issue
 
 if TYPE_CHECKING:
-    from jarvis_sec.project_database import ProjectDatabase
+    from jarvis.jarvis_sec.project_database import ProjectDatabase
 
 # 污点分析框架（核心依赖）
-import jarvis_sec.taint_analyzer as taint_analyzer
+import jarvis.jarvis_sec.taint_analyzer as taint_analyzer
 
 # 数据流分析器（用于误报过滤）
-from jarvis_sec.data_flow_analyzer import (
+from jarvis.jarvis_sec.data_flow_analyzer import (
     DataFlowAnalyzer,
     DataFlowResult,
 )
@@ -569,7 +569,7 @@ def _rule_unsafe(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_unsafe"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_unsafe"
         )
         pass
 
@@ -625,7 +625,7 @@ def _rule_raw_pointer(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_raw_pointer"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_raw_pointer"
         )
         pass
 
@@ -688,7 +688,7 @@ def _rule_transmute(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_transmute"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_transmute"
         )
         pass
 
@@ -796,7 +796,7 @@ def _rule_maybe_uninit(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_maybe_uninit"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_maybe_uninit"
         )
         pass
 
@@ -856,7 +856,7 @@ def _rule_unwrap_expect(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_unwrap_expect"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_unwrap_expect"
         )
         pass
 
@@ -911,7 +911,7 @@ def _rule_extern_c(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_extern_c"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_extern_c"
         )
         pass
 
@@ -984,7 +984,7 @@ def _rule_unsafe_impl(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_unsafe_impl"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_unsafe_impl"
         )
         pass
 
@@ -1039,7 +1039,7 @@ def _rule_ignore_result(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_ignore_result"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_ignore_result"
         )
         pass
 
@@ -1101,7 +1101,7 @@ def _rule_forget(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_forget"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_forget"
         )
         pass
 
@@ -1163,7 +1163,7 @@ def _rule_get_unchecked(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_get_unchecked"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_get_unchecked"
         )
         pass
 
@@ -1233,7 +1233,7 @@ def _rule_pointer_arithmetic(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_pointer_arithmetic",
         )
         pass
@@ -1308,7 +1308,7 @@ def _rule_unsafe_mem_ops(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_unsafe_mem_ops",
         )
         pass
@@ -1372,7 +1372,7 @@ def _rule_from_raw_parts(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_from_raw_parts",
         )
         pass
@@ -1493,7 +1493,7 @@ def _rule_manually_drop(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_manually_drop"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_manually_drop"
         )
         pass
 
@@ -1556,7 +1556,7 @@ def _rule_panic_unreachable(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_panic_unreachable",
         )
         pass
@@ -1652,7 +1652,7 @@ def _rule_refcell_borrow(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_refcell_borrow",
         )
         pass
@@ -1740,7 +1740,7 @@ def _rule_ffi_cstring(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_ffi_cstring"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_ffi_cstring"
         )
         pass
 
@@ -2042,7 +2042,7 @@ def _rule_into_raw(
                 )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_into_raw"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_into_raw"
         )
         pass
 
@@ -2161,7 +2161,7 @@ def _rule_unchecked_math(
     except Exception as e:
         save_exception(
             e,
-            module="jarvis_sec.checkers.rust_checker",
+            module="jarvis.jarvis_sec.checkers.rust_checker",
             function="_rule_unchecked_math",
         )
         pass
@@ -2591,7 +2591,7 @@ def _rule_uninit_zeroed(
             )
     except Exception as e:
         save_exception(
-            e, module="jarvis_sec.checkers.rust_checker", function="_rule_uninit_zeroed"
+            e, module="jarvis.jarvis_sec.checkers.rust_checker", function="_rule_uninit_zeroed"
         )
         pass
 
@@ -2634,8 +2634,8 @@ def analyze_rust_text(
     _db_file_path = relpath  # 用于查询database的文件路径
     if database is None:
         try:
-            from jarvis_sec.project_database import ProjectDatabase
-            from jarvis_sec.data_collector import DataCollector
+            from jarvis.jarvis_sec.project_database import ProjectDatabase
+            from jarvis.jarvis_sec.data_collector import DataCollector
 
             _temp_database = ProjectDatabase(".", in_memory=True)
             collector = DataCollector(_temp_database)

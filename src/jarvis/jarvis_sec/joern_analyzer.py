@@ -19,7 +19,7 @@ from .taint_analyzer import (
 )
 
 if TYPE_CHECKING:
-    from jarvis_sec.project_database import ProjectDatabase
+    from jarvis.jarvis_sec.project_database import ProjectDatabase
 
 
 class JoernAnalyzer(TaintAnalyzer):
